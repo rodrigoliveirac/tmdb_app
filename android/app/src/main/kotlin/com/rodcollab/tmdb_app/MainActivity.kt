@@ -1,0 +1,5 @@
+package com.rodcollab.tmdb_app
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity()
