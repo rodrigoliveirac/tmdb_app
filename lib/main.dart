@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tmdb_app/model/MovieItemModel.dart';
+import 'package:tmdb_app/service/ApiService.dart';
 import 'package:tmdb_app/widgets/MovieItem.dart';
 import 'package:tmdb_app/widgets/MovieList.dart';
 
@@ -34,10 +35,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  @override
+  void initState() {
+    super.initState();
+    ApiService().getMovies();
   }
 
   List<MovieItemModel> movies = [
