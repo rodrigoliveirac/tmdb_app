@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tmdb_app/navigation/arguments/MovieDetailsScreenArgs.dart';
 
+import '../../ButtonSectionMovieDetails.dart';
 import '../../controller/MovieDetailsController.dart';
 import '../ImageSection.dart';
 import '../MovieInfoContent.dart';
@@ -51,6 +52,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     image: image,
                   ),
                   MovieInfoContent(title: title, overview: overview),
+                  const ButtonSectionMovieDetails()
                 ],
               ),
             ),
@@ -83,7 +85,8 @@ class ShimmerMovieDetails extends StatelessWidget {
               width: 600,
               child: const Center(heightFactor: 240, widthFactor: 600)),
         ),
-        ShimmerMovieInfoContent()
+        const ShimmerMovieInfoContent(),
+        const ShimmerButtonSection()
       ],
     ));
   }
