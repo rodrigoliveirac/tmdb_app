@@ -6,38 +6,43 @@ import 'package:shimmer/shimmer.dart';
 class MovieItem extends StatelessWidget {
   final String img;
   final String title;
-  final String description;
+  final int movieId;
+  final void Function(int) onMovieDetails;
 
-  const MovieItem(
-      {super.key,
-      required this.img,
-      required this.title,
-      required this.description});
+  const MovieItem({super.key,
+    required this.img,
+    required this.title,
+    required this.movieId,
+    required this.onMovieDetails
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Shimmer.fromColors(
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[100]!,
-                child: Container(
-                    color: Colors.grey[300],
-                    height: double.infinity,
-                    width: double.infinity,
-                    child: const Center(
-                        widthFactor: double.infinity,
-                        heightFactor: double.infinity))),
-            FadeInImage.memoryNetwork(
-                placeholder: kTransparentImage, image: img, fit: BoxFit.fill)
-          ],
-        ));
+    return GestureDetector(
+      onTap: () => onMovieDetails(movieId),
+      child: Card(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Container(
+                      color: Colors.grey[300],
+                      height: double.infinity,
+                      width: double.infinity,
+                      child: const Center(
+                          widthFactor: double.infinity,
+                          heightFactor: double.infinity))),
+              FadeInImage.memoryNetwork(
+                  placeholder: kTransparentImage, image: img, fit: BoxFit.fill)
+            ],
+          )),
+    );
   }
 }
 

@@ -4,8 +4,8 @@ import 'MovieItem.dart';
 
 class MovieList extends StatelessWidget {
   final List<MovieItemModel> movies;
-
-  const MovieList({super.key, required this.movies});
+  final void Function(int) onMovieDetails;
+  const MovieList({super.key, required this.movies, required this.onMovieDetails});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,9 @@ class MovieList extends StatelessWidget {
         return MovieItem(
             img: movies[index].posterPath,
             title: movies[index].title,
-            description: movies[index].overview);
+            movieId: movies[index].id,
+            onMovieDetails: onMovieDetails,
+        );
       },
     );
   }

@@ -1,22 +1,23 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:tmdb_app/widgets/screens/MovieDetailsScreen.dart';
 
 import '../../controller/MoviesController.dart';
 import '../../model/MovieItemModel.dart';
+import '../../navigation/arguments/MovieDetailsScreenArgs.dart';
 import '../MovieList.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, required this.controller});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key, required this.title, required this.controller});
 
   final String title;
   final MoviesController controller;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   List<MovieItemModel> movies = [];
 
   @override
@@ -35,8 +36,18 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(widget.title),
         ),
         body: (widget.controller.isLoading)
-            ?  const ShimmerList()
-            : MovieList(movies: widget.controller.movies));
+            ? const ShimmerList()
+            : MovieList(
+                movies: widget.controller.movies,
+                onMovieDetails: ((movieId) => {
+                      Navigator.pushNamed(
+                        context,
+                        MovieDetailsScreen.routeName,
+                        arguments:
+                            MovieDetailsScreenArgs('$movieId', 'Movie Details'),
+                      )
+                    }),
+              ));
   }
 
   void updateMovies(List<MovieItemModel> movies) {
