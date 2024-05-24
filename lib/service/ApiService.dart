@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:tmdb_app/controller/MovieDetailsController.dart';
+import 'package:tmdb_app/model/ActorModel.dart';
 import 'package:tmdb_app/model/MovieItemModel.dart';
 import 'package:tmdb_app/model/PopularModel.dart';
 
@@ -13,13 +14,15 @@ const String endpoint = 'https://api.themoviedb.org/3/movie';
 class ApiService {
   final String endpointPopular = '$endpoint/popular';
   final String endpointMovieDetails = endpoint;
+  late String endpointMovieCredit;
+
   final String imgUrl = 'https://image.tmdb.org/t/p/original/';
 
   Future<List<MovieItemModel>> getMovies() async {
     var client = HttpClient();
     try {
       HttpClientRequest request =
-          await client.getUrl(Uri.parse(endpointPopular));
+      await client.getUrl(Uri.parse(endpointPopular));
       request.headers.contentType =
           ContentType('application', 'json', charset: 'utf-8');
       request.headers.add(HttpHeaders.acceptHeader, 'application/json');
@@ -29,9 +32,11 @@ class ApiService {
       final stringData = await response.transform(utf8.decoder).join();
       final movieMap = jsonDecode(stringData) as Map<String, dynamic>;
 
-      final list = PopularModel.fromJson(movieMap)
+      final list = PopularModel
+          .fromJson(movieMap)
           .results
-          .map((item) => MovieItemModel(
+          .map((item) =>
+          MovieItemModel(
               title: item.title,
               overview: item.overview,
               img: getUriImg(imgUrl, item.img),
@@ -64,7 +69,7 @@ class ApiService {
 
     try {
       HttpClientRequest request =
-          await client.getUrl(Uri.parse(getPathMovieDetails(id)));
+      await client.getUrl(Uri.parse(getPathMovieDetails(id)));
       request.headers.contentType =
           ContentType('application', 'json', charset: 'utf-8');
       request.headers.add(HttpHeaders.acceptHeader, 'application/json');
@@ -79,13 +84,49 @@ class ApiService {
           id: movieModelResponse.id,
           title: movieModelResponse.title,
           overview: movieModelResponse.overview,
-          image: getUriImg(imgUrl, movieModelResponse.backdropPath));
+          image: getUriImg(imgUrl, movieModelResponse.backdropPath),
+          actors: []);
     } finally {
       client.close();
     }
   }
 
   String getPathMovieDetails(String id) {
-    return '$endpointMovieDetails/$id';
+    final movieDetailsPath = '$endpointMovieDetails/$id';
+    updateMovieCredit(movieDetailsPath);
+    return movieDetailsPath;
+  }
+
+  void updateMovieCredit(String movieDetailsPath) {
+    endpointMovieCredit = '$movieDetailsPath/credits';
+  }
+
+  Future<List<ActorModel>> getActors(String id) async {
+    var client = HttpClient();
+
+    try {
+      HttpClientRequest request =
+      await client.getUrl(Uri.parse(endpointMovieCredit));
+      request.headers.contentType =
+          ContentType('application', 'json', charset: 'utf-8');
+      request.headers.add(HttpHeaders.acceptHeader, 'application/json');
+      request.headers.add(HttpHeaders.authorizationHeader, 'Bearer $API_KEY');
+      print(endpointMovieCredit);
+      HttpClientResponse response = await request.close();
+      final stringData = await response.transform(utf8.decoder).join();
+      final movieDetailsMap = jsonDecode(stringData) as Map<String, dynamic>;
+      print(stringData);
+      final movieModelResponse = ApiActorResponse.fromJson(movieDetailsMap);
+      return movieModelResponse.cast?.map((item) =>
+          ActorModel(
+              id: item.id,
+              name: item.name,
+              character: item.character,
+              img: (item.img == null) ? null : getUriImg(imgUrl, item.img!)
+          )
+      ).toList() ?? [];
+    } finally {
+      client.close();
+    }
   }
 }
