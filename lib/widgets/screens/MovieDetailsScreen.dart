@@ -2,27 +2,67 @@ import 'package:flutter/material.dart';
 import 'package:tmdb_app/navigation/arguments/MovieDetailsScreenArgs.dart';
 
 import '../../controller/MovieDetailsController.dart';
+import '../ImageSection.dart';
+import '../MovieInfoContent.dart';
 
-class MovieDetailsScreen extends StatelessWidget {
-
+class MovieDetailsScreen extends StatefulWidget {
   final MovieDetailsController movieDetailsController;
+
   const MovieDetailsScreen({super.key, required this.movieDetailsController});
 
   static const routeName = '/movieDetails';
 
   @override
-  Widget build(BuildContext context) {
-    // Extract the arguments from the current ModalRoute
-    // settings and cast them as ScreenArguments.
-    final args = ModalRoute.of(context)!.settings.arguments as MovieDetailsScreenArgs;
+  State<MovieDetailsScreen> createState() => _MovieDetailsScreenState();
+}
 
+class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
+  late String titleAppBar;
+  late String image;
+  late String title;
+  late String overview;
+
+  @override
+  void didChangeDependencies() {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as MovieDetailsScreenArgs;
+    setState(() {
+      titleAppBar = args.title;
+    });
+    widget.movieDetailsController.loadMovieDetails(args.movieId, ((movie) {
+      updateScreenState(movie);
+    }));
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(args.title),
+        title: Text(titleAppBar),
       ),
-      body: Center(
-        child: Text(args.movieId),
+      body: SingleChildScrollView(
+        child: (widget.movieDetailsController.isLoading)
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Column(
+                children: [
+                  ImageSection(
+                    image: image,
+                  ),
+                  MovieInfoContent(title: title, overview: overview),
+                ],
+              ),
       ),
     );
+  }
+
+  void updateScreenState(MovieDetailsModel movie) {
+    setState(() {
+      title = movie.title;
+      image = movie.image;
+      overview = movie.overview;
+    });
   }
 }

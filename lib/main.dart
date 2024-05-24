@@ -14,7 +14,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final MoviesController moviesController;
-
   final MovieDetailsController movieDetailsController;
 
   MyApp({super.key, required this.moviesController, required this.movieDetailsController});
