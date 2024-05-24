@@ -12,7 +12,7 @@ class MoviesController with ChangeNotifier {
   List<MovieItemModel> _movies = [];
   List<MovieItemModel> get movies => _movies;
 
-  Future<void> loadMovies(void Function(List<MovieItemModel>) onResult) async {
+    void loadMovies(void Function(List<MovieItemModel>) onResult) async {
     _isLoading = true;
     Future<List<MovieItemModel>> list = service.getMovies();
     _movies = await list;

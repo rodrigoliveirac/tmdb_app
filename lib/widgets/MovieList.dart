@@ -3,7 +3,6 @@ import '../model/MovieItemModel.dart';
 import 'MovieItem.dart';
 
 class MovieList extends StatelessWidget {
-
   final List<MovieItemModel> movies;
 
   const MovieList({super.key, required this.movies});
@@ -16,14 +15,13 @@ class MovieList extends StatelessWidget {
         mainAxisSpacing: 16.0, // spacing between rows
         crossAxisSpacing: 16.0, // spacing between columns
       ),
-      padding: const EdgeInsets.all(24.0), // padding around the grid
-      itemCount: movies.length, // total number of items
+      padding: const EdgeInsets.all(24.0),
+      itemCount: movies.length,
       itemBuilder: (context, index) {
         return MovieItem(
             img: movies[index].posterPath,
             title: movies[index].title,
-            description: movies[index].overview
-        );
+            description: movies[index].overview);
       },
     );
   }
