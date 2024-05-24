@@ -13,16 +13,16 @@ class MovieList extends StatelessWidget {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // number of items in each row
-        mainAxisSpacing: 8.0, // spacing between rows
-        crossAxisSpacing: 8.0, // spacing between columns
+        mainAxisSpacing: 16.0, // spacing between rows
+        crossAxisSpacing: 16.0, // spacing between columns
       ),
-      padding: const EdgeInsets.all(8.0), // padding around the grid
+      padding: const EdgeInsets.all(24.0), // padding around the grid
       itemCount: movies.length, // total number of items
       itemBuilder: (context, index) {
         return MovieItem(
-            img: movies[index].img,
+            img: movies[index].posterPath,
             title: movies[index].title,
-            description: movies[index].description
+            description: movies[index].overview
         );
       },
     );
