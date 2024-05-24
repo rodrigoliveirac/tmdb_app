@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tmdb_app/controller/MovieDetailsController.dart';
 import 'package:tmdb_app/controller/MoviesController.dart';
 import 'package:tmdb_app/service/ApiService.dart';
-import 'package:tmdb_app/widgets/screens/HomeScreen.dart';
-import 'package:tmdb_app/widgets/screens/MovieDetailsScreen.dart';
+
+import 'features/movies/widgets/screens/HomeScreen.dart';
+import 'features/movies/widgets/screens/MovieDetailsScreen.dart';
 
 void main() {
   late ApiService service = ApiService();

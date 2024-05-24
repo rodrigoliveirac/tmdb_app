@@ -25,6 +25,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   late String image;
   late String title;
   late String overview;
+  late List<ActorModel> actors;
 
   @override
   void didChangeDependencies() {
@@ -47,16 +48,15 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       ),
       body: (widget.movieDetailsController.isLoading)
           ? const ShimmerMovieDetails()
-          : SingleChildScrollView(
-              child: Column(
-                children: [
-                  ImageSection(
-                    image: image,
-                  ),
-                  MovieInfoContent(title: title, overview: overview),
-                  const ButtonSectionMovieDetails()
-                ],
-              ),
+          : Column(
+              children: [
+                ImageSection(
+                  image: image,
+                ),
+                MovieInfoContent(title: title, overview: overview),
+                const ButtonSectionMovieDetails(),
+                Expanded(child: ActorsList(actors: actors))
+              ],
             ),
     );
   }
@@ -66,6 +66,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       title = movie.title;
       image = movie.image;
       overview = movie.overview;
+      actors = movie.actors;
+      print(actors.toList().first.name.toString());
     });
   }
 }
@@ -116,7 +118,8 @@ class ShimmerMovieInfoContent extends StatelessWidget {
                         color: Colors.grey[300],
                         height: 16,
                         width: double.infinity,
-                        child: const Center(heightFactor: 16, widthFactor: double.infinity)),
+                        child: const Center(
+                            heightFactor: 16, widthFactor: double.infinity)),
                   ),
                 ),
                 Shimmer.fromColors(
@@ -126,7 +129,8 @@ class ShimmerMovieInfoContent extends StatelessWidget {
                       color: Colors.grey[300],
                       height: 100,
                       width: double.infinity,
-                      child: const Center(heightFactor: 200, widthFactor: double.infinity)),
+                      child: const Center(
+                          heightFactor: 200, widthFactor: double.infinity)),
                 ),
               ],
             ),
@@ -135,5 +139,4 @@ class ShimmerMovieInfoContent extends StatelessWidget {
       ),
     );
   }
-
 }
