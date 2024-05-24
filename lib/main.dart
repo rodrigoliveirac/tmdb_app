@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:tmdb_app/controller/MoviesController.dart';
 import 'package:tmdb_app/model/MovieItemModel.dart';
-import 'package:tmdb_app/service/ApiService.dart';
-import 'package:tmdb_app/widgets/MovieItem.dart';
 import 'package:tmdb_app/widgets/MovieList.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+
+  final MoviesController controller = MoviesController();
+
+  MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,47 +21,49 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Tmdb App'),
+      home: MyHomePage(title: 'Tmdb App', controller: controller),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, required this.controller});
 
   final String title;
+  final MoviesController controller;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  List<MovieItemModel> movies = [];
 
   @override
   void initState() {
     super.initState();
-    ApiService().getMovies();
+    widget.controller.loadMovies((movies) {
+      updateMovies(movies);
+    });
   }
-
-  List<MovieItemModel> movies = [
-    MovieItemModel(title: "titulo 1", img: "img 1", description: "desc 1"),
-    MovieItemModel(title: "titulo 2", img: "img 2", description: "desc 2"),
-    MovieItemModel(title:
-    "titulo 3", img: "img 3", description: "desc 3"),
-    MovieItemModel(title: "titulo 4", img: "img 4", description: "desc 4"),
-    MovieItemModel(title: "titulo 5", img: "img 5", description: "desc 5"),
-    MovieItemModel(title: "titulo 6", img: "img 6", description: "desc 6")
-  ];
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text(widget.title),
         ),
-        body: MovieList(movies: movies));
+        body: (widget.controller.isLoading)
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : MovieList(movies: widget.controller.movies));
+  }
+
+  void updateMovies(List<MovieItemModel> movies) {
+    setState(() {
+      this.movies = movies;
+    });
   }
 }
