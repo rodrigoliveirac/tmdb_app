@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:tmdb_app/widgets/screens/MovieDetailsScreen.dart';
 
-import '../../controller/MoviesController.dart';
-import '../../model/MovieItemModel.dart';
-import '../../navigation/arguments/MovieDetailsScreenArgs.dart';
+import '../../../../controller/MoviesController.dart';
+import '../../../../model/MovieItemModel.dart';
+import '../../../../navigation/arguments/MovieDetailsScreenArgs.dart';
 import '../MovieList.dart';
+import 'MovieDetailsScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.title, required this.controller});

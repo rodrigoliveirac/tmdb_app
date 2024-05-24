@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:tmdb_app/features/actors/widgets/ActorsList.dart';
 import 'package:tmdb_app/navigation/arguments/MovieDetailsScreenArgs.dart';
 
-import '../../ButtonSectionMovieDetails.dart';
-import '../../controller/MovieDetailsController.dart';
+import '../../../../ButtonSectionMovieDetails.dart';
+import '../../../../controller/MovieDetailsController.dart';
+import '../../../../model/ActorModel.dart';
 import '../ImageSection.dart';
 import '../MovieInfoContent.dart';
 
